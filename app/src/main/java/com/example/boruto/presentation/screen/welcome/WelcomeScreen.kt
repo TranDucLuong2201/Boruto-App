@@ -12,13 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
@@ -34,10 +31,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.boruto.R
 import com.example.boruto.domain.model.OnBoardingPage
+import com.example.boruto.navigation.Screen
 import com.example.boruto.ui.theme.EXTRA_LARGE_PADDING
+import com.example.boruto.ui.theme.LARGE_PADDING
 import com.example.boruto.ui.theme.MEDIUM_PADDING
 import com.example.boruto.ui.theme.SMALL_PADDING
 import com.example.boruto.ui.theme.activeIndicatorColor
@@ -50,14 +50,17 @@ import com.example.boruto.util.Constant.LAST_ON_BOARDING_PAGE
 import com.example.boruto.util.Constant.ON_BOARDING_PAGE_COUNT
 
 @Composable
-fun WelcomeScreen(navController: NavHostController) {
+fun WelcomeScreen(
+    navController: NavHostController,
+    welcomeViewModel: WelcomeViewModel = hiltViewModel()
+) {
     val pages = listOf(
         OnBoardingPage.First,
         OnBoardingPage.Second,
         OnBoardingPage.Third,
     )
 
-    val pagerState = rememberPagerState(pageCount = {ON_BOARDING_PAGE_COUNT})
+    val pagerState = rememberPagerState(pageCount = { ON_BOARDING_PAGE_COUNT })
 
     Column(
         modifier = Modifier
@@ -92,14 +95,18 @@ fun WelcomeScreen(navController: NavHostController) {
             }
         }
         FinishButton(
-            modifier = Modifier.weight(2f),
+            modifier = Modifier.weight(1f),
             pagerState = pagerState
-        ) { }
+        ) {
+            navController.popBackStack()
+            navController.navigate(route = Screen.Home.route)
+            welcomeViewModel.saveOnBoardingState(completed = true)
+        }
     }
 }
 
 @Composable
-fun PagerScreen(onBoardingPage: OnBoardingPage){
+fun PagerScreen(onBoardingPage: OnBoardingPage) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -140,10 +147,10 @@ fun PagerScreen(onBoardingPage: OnBoardingPage){
 fun FinishButton(
     modifier: Modifier,
     pagerState: PagerState,
-    onClick: () ->Unit
+    onClick: () -> Unit
 ) {
     Row(
-        modifier = modifier.padding(all= MEDIUM_PADDING),
+        modifier = modifier.padding(all = LARGE_PADDING),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -156,7 +163,8 @@ fun FinishButton(
                 colors = ButtonDefaults.elevatedButtonColors(
                     contentColor = Color.White,
                     containerColor = MaterialTheme.colorScheme.buttonBackgroundColor
-                )) {
+                )
+            ) {
                 Text("Finish")
             }
         }
@@ -170,6 +178,7 @@ private fun FirstOnBoardingScreenPreview() {
         PagerScreen(onBoardingPage = OnBoardingPage.First)
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 private fun SecondOnBoardingScreenPreview() {
@@ -177,6 +186,7 @@ private fun SecondOnBoardingScreenPreview() {
         PagerScreen(onBoardingPage = OnBoardingPage.Second)
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 private fun ThirdOnBoardingScreenPreview() {

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
 }
 
 android {
@@ -84,11 +85,11 @@ dependencies {
     implementation("androidx.paging:paging-compose:$pagingVersion")
 
     // optional - Paging 3 Integration
-    val room_version = "2.6.1"
-    implementation("androidx.room:room-paging:$room_version")
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-paging:$roomVersion")
 
     // KotlinX serialization
-    implementation(libs.kotlinx.serialization.json)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     // DataStore Preferences
     implementation(libs.androidx.datastore.preferences)

@@ -45,3 +45,15 @@ val ColorScheme.inactiveIndicatorColor: Color
 val ColorScheme.buttonBackgroundColor: Color
     @Composable
     get() = if (isSystemInDarkTheme()) Purple500 else Purple700
+
+val ColorScheme.topAppBarContentColor: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) LightGray else Color.White
+
+val ColorScheme.topAppBarBackGroundColor: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) Color.Black else Purple500
+
+val ColorScheme.topAppBarActionIcons: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) LightGray else Color.White
